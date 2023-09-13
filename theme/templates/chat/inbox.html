@@ -1,0 +1,199 @@
+{% extends 'chat/messages_list.html' %}
+{% block message %}
+<style>
+    /* Add this CSS to your project's stylesheet */
+    .message-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .message {
+        padding: 10px;
+        border-radius: 10px;
+        margin: 5px;
+        max-width: 70%;
+        clear: both;
+    }
+
+    .sent {
+        background-color: #efefef;
+        /* Sent message background color */
+        border: 1px solid #efefef;
+        /* Border color matches background color */
+        color: #000;
+        float: right;
+    }
+
+    .received {
+        background-color: #FFFFFF;
+        /* Received message background color */
+        border: 1px solid #ECE5DD;
+        /* Border color matches background color */
+        color: #000;
+        float: left;
+    }
+
+    /* Add spacing between the icons */
+    .flex-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .flex-container i {
+        margin-right: 10px;
+        /* Adjust the spacing as needed */
+    }
+
+    /* Center the icons and input box horizontally */
+    .flex-container form {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .flex-container i {
+        margin-right: 10px;
+        /* Adjust the spacing as needed */
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #fff; /* Change to the desired background color */
+        padding: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Style for the input box */
+    .footer input[type="text"] {
+        flex-grow: 2; /* Adjust the flex-grow value to increase or decrease the width */
+        padding: 10px;
+        border: none;
+        border-radius: 30px;
+        background-color: #f4f4f4; /* Change to the desired background color */
+        margin-right: 10px; /* Add spacing between input and button */
+    }
+
+    /* Style for the send button */
+    .footer button {
+        background-color: #128C7E; /* Change to the desired background color */
+        color: #fff; /* Change to the desired text color */
+        border: none;
+        border-radius: 50%;
+        padding: 12px 16px;
+        cursor: pointer;
+    }
+</style>
+{% if messages %}
+<!-- message head -->
+<div class="bg-black h-16 flex flex-row items-center justify-between">
+    <h2 class="text-white text-2xl font-semibold font-sans ml-4">
+        {{ other_person.username }}
+    </h2>
+</div>
+<!-- message head end -->
+<div class="bg-gray-300 h-[calc(100vh - 80px)] p-4">
+    <!-- read the messages  -->
+    <div class="flex flex-col-reverse h-full w-full overflow-y-scroll">
+        <!-- conversation -->
+        <div class="space-y-4 message-container">
+            {% for message in messages %}
+            <div class="{% if message.sender == you %}text-right{% else %}text-left{% endif %}">
+                <div class="message {% if message.sender == you %}sent{% else %}received{% endif %}">
+                    {{ message.message }}
+                    <br>
+                    <small class="text-xs text-gray-600 block text-right">{{ message.date }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- conversation end -->
+    </div>
+    <!-- read the messages end -->
+</div>
+
+<!-- type a message -->
+<div class="bg-gray-300 p-4 flex items-center" style="width: 100%;">
+    <!-- emoji icon -->
+    <i class="fa-solid fa-face-smile-beam text-xl text-gray-500 mr-3" style="margin-left: 5%;"></i> 
+    <!-- attachment icon -->
+    <i class="fa-solid fa-link text-xl text-gray-500 mr-3" style="margin-left: 20px;"></i>
+
+    <form action="{% url 'chat:inbox' other_person.username %}" method="POST" class="flex-grow">
+        {% csrf_token %}
+        <input type="hidden" name="recipient" value="{{ other_person.pk }}">
+        <input type="hidden" name="you" value="{{ you.pk }}">
+        
+        <!-- Wrap both input and button in a container div -->
+        <div style="display: flex; align-items: center; width: 280%;">
+            <!-- input box -->
+            <input type="text" name="message"
+                class="w-full px-3 py-2 text-base font-normal text-gray-700 bg-white border border-gray-300 rounded focus:outline-none"
+                placeholder="Type a message..." style="flex-grow: 2; margin-left: 35%;" >
+            
+            <!-- send button -->
+            <button aria-hidden="true" type="submit" class="bg-white text-black px-4 py-2 rounded-full" style="margin-left: 10%;">
+                <i class="fa fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+    
+    
+
+</div>
+<!-- type a message end -->
+{% else %}
+
+<!-- message head -->
+<div class="bg-black h-16 flex flex-row items-center justify-between">
+    <h2 class="text-white text-2xl font-semibold font-sans ml-4">
+        {{ other_person.username }}
+    </h2>
+</div>
+<!-- message head end -->
+<div class="bg-gray-300 h-[calc(100vh - 80px)] p-4">
+    <!-- No messages yet alert -->
+    <div class="flex justify-center items-center h-full">
+        <div class="bg-slate-400 rounded-md font-medium px-4 py-1">
+            <p class="text-start">
+                No messages yet
+            </p>
+        </div>
+    </div>
+    <!-- No messages yet alert end -->
+</div>
+
+<!-- type a message -->
+<div class="bg-gray-300 p-4 flex items-center" style="width: 100%;">
+    <!-- emoji icon -->
+    <i class="fa-solid fa-face-smile-beam text-xl text-gray-500 mr-3" style="margin-left: 5%;"></i>
+    <!-- attachment icon -->
+    <i class="fa-solid fa-link text-xl text-gray-500 mr-3" style="margin-left: 20px; margin-right: 60px;"></i>
+
+    <form action="{% url 'chat:inbox' other_person.username %}" method="POST" class="flex-grow">
+        {% csrf_token %}
+        <input type="hidden" name="recipient" value="{{ other_person.pk }}">
+        <input type="hidden" name="you" value="{{ you.pk }}">
+        
+        <!-- Wrap both input and button in a container div -->
+        <div style="display: flex; align-items: center; width: 280%;">
+            <!-- input box -->
+            <input type="text" name="message"
+                class="w-full px-3 py-2 text-base font-normal text-gray-700 bg-white border border-gray-300 rounded focus:outline-none"
+                placeholder="Type a message..." style="flex-grow: 2; margin-left: 30%;" >
+            
+            <!-- send button -->
+            <button aria-hidden="true" type="submit" class="bg-white text-black px-4 py-2 rounded-full" style="margin-left: 10%;">
+                <i class="fa fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+    
+</div>
+<!-- type a message end -->
+
+{% endif %}
+{% endblock %}

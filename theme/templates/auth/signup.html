@@ -1,0 +1,157 @@
+{% load static%}
+{% load tailwind_filters %}
+{% load crispy_forms_tags %}
+{% load tailwind_filters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="gr1nch">
+	<meta name="description" content="Chat website">
+	<meta name="keywords" content="chat, website, chat website">
+
+	<!-- adding tailwindcss -->
+	
+	{% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
+	<!-- font awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+	<link href="{% static 'css/output.css' %}" rel="stylesheet">
+	<title>MindLyfe</title>
+</head>
+<header class="flex flex-row sm:justify-between space-x-4 bg-black h-16">
+	<a href="{% url 'chat:message_list' %}">
+		<h3 class="text-center text-white py-5 px-10 text-4xl font-bold">
+			MindLyfe
+		</h3>
+	</a>
+<!-- Registration and logout buttons-->
+<div class="flex flex-row justify-between items-center">
+	{% if request.user.is_authenticated %}
+	<a href="{% url 'chat:logout' %}" class="flex mr-4">
+		<button type="button" class="inline-block
+									px-6 py-2.5
+									bg-red-600
+									text-white
+									font-medium
+									text-xs
+									leading-tight
+									uppercase
+									rounded
+									shadow-md
+									hover:bg-red-700
+									hover:shadow-lg
+									focus:bg-red-700
+									focus:shadow-lg
+									focus:outline-none
+									focus:ring-0
+									active:bg-red-800
+									active:shadow-lg
+									transition
+									duration-150
+									ease-in-out">
+				Logout
+		</button>
+	</a>
+
+	{% else %}
+
+		<a href="{% url 'chat:login' %}" class="flex mr-2">
+			<button type="button" class="inline-block
+											px-6
+											py-2.5
+											bg-green-500
+											text-white
+											font-medium
+											text-xs
+											leading-tight
+											uppercase rounded
+											shadow-md
+											hover:bg-green-600
+											hover:shadow-lg
+											focus:bg-green-600
+											focus:shadow-lg
+											focus:outline-none
+											focus:ring-0
+											active:bg-green-700
+											active:shadow-lg
+											transition
+											duration-150
+											ease-in-out">
+					Login
+			</button>
+		</a>
+	{% endif %}
+	</div>
+	<!-- Registration and logout buttons end-->
+</header>
+
+
+
+
+
+{% block message %}
+<!-- head -->
+
+<!-- head end -->
+<!-- body -->
+<div class=" bg-slate-400 h-fit" style="background-color:#efefef;">
+
+  <!--  content  -->
+  <div class="flex justify-center h-fit w-full" >
+    <div class=" justify-self-center m-auto bg-slate-400 rounded-md font-medium px-4 py-1" style="background-color:#efefef; height: auto;">
+      <div class="flex flex-col">
+		
+        <form method="post" novalidate>
+	
+          <div class="container px-6 py-11 h-fit">
+            <div class="flex justify-center items-center flex-nowrap h-fit g-6 text-gray-800" >
+              <!-- image -->
+              <div class="md:w-8/12 lg:w-6/12 mb-12 md:mb-0" >
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+                  class="w-full" alt="Phone image" />
+              </div>
+              <!-- image end -->
+			  
+              <div class="md:w-8/12 lg:w-5/12 lg:ml-20"  style="border-radius: 25px; background-color: white; padding: 20px;  margin: 0 auto; 
+			  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); margin-bottom: 20px;">
+                {% csrf_token %}
+                <!-- Get the username -->
+				<h2 class="text-xl font-medium text-gray-800 mb-4 text-center " style=" margin-bottom:5px;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2) ; border-radius: 25px;">Signup For An Account</h2>
+                <div class="mb-4"  >
+                  <div class="class=" form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white
+                    bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0
+                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" ">
+                      {{ form|crispy}}
+                  </div>
+                </div>
+                <!-- username end -->
+                <!-- button -->
+                <div class=" mt-6">
+                    <button type="submit"
+                      class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+                      data-mdb-ripple="true" data-mdb-ripple-color="light">
+                      Login
+                    </button>
+                </div>
+                  <!-- button end -->
+                </div>
+              </div>
+            </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- content -->
+
+  {% endblock %}
+  <div class="Van">
+	<footer class="py-3 bg-grey">
+	  <p class="m-0 text-dark text-center " style="color: white;">Copyright &copy; MindLyfe</p>
+  </footer>
+  </div>
+
